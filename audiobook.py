@@ -23,9 +23,14 @@ def translate_text(text, source_lang="auto", target_lang="hi"):
     translated_chunks = [translator.translate(chunk) for chunk in chunks]
     return " ".join(translated_chunks)  # Combine translated chunks
 
+# Function to generate speech from text
+def text_to_speech(text, lang, filename):
+    tts = gTTS(text, lang=lang)
+    tts.save(filename)
+
 # Streamlit App Setup
-st.set_page_config(page_title="PDF to Hindi Audiobook", layout="centered")
-st.title("📖 PDF to Hindi Audiobook Converter 🇮🇳")
+st.set_page_config(page_title="PDF to Audiobook (Original & Translated)", layout="centered")
+st.title("📖 PDF to Audiobook Converter 🎧")
 
 # Upload PDF File
 uploaded_file = st.file_uploader("Upload a PDF file", type=["pdf"])
@@ -41,19 +46,28 @@ if uploaded_file is not None:
     if text.strip():
         st.success("✅ Text extracted successfully!")
 
+        # Generate Original Audiobook (Source Language)
+        st.subheader("🎧 Generating Audiobook in Original Language...")
+        original_audio_file = "original_audiobook.mp3"
+        text_to_speech(text, "en", original_audio_file)
+
+        st.audio(original_audio_file, format="audio/mp3")
+        with open(original_audio_file, "rb") as f:
+            st.download_button("⬇ Download Original Audiobook", f, file_name="original_audiobook.mp3")
+
         # Translate to Hindi (Handling Large Text)
         st.subheader("🌍 Translating to Hindi...")
         translated_text = translate_text(text)
         st.text_area("Translated Text (Hindi):", translated_text, height=300)
 
-        # Convert to Speech
-        if st.button("🎧 Convert to Hindi Audiobook"):
-            audio_file = "hindi_audiobook.mp3"
-            tts = gTTS(translated_text, lang="hi")
-            tts.save(audio_file)
+        # Generate Translated Audiobook (Hindi)
+        st.subheader("🎧 Generating Hindi Audiobook...")
+        hindi_audio_file = "hindi_audiobook.mp3"
+        text_to_speech(translated_text, "hi", hindi_audio_file)
 
-            st.audio(audio_file, format="audio/mp3")
-            with open(audio_file, "rb") as f:
-                st.download_button("⬇ Download Hindi Audiobook", f, file_name="hindi_audiobook.mp3")
+        st.audio(hindi_audio_file, format="audio/mp3")
+        with open(hindi_audio_file, "rb") as f:
+            st.download_button("⬇ Download Hindi Audiobook", f, file_name="hindi_audiobook.mp3")
+
     else:
         st.error("❌ No readable text found in the PDF.")
