@@ -2,7 +2,7 @@ import streamlit as st
 import pdfplumber
 from gtts import gTTS
 import os
-from googletrans import Translator
+from deep_translator import GoogleTranslator
 
 # Set up Streamlit App
 st.set_page_config(page_title="PDF to Hindi Audiobook", layout="centered")
@@ -22,10 +22,10 @@ if uploaded_file is not None:
     if text.strip():
         st.success("✅ Text extracted successfully!")
 
-        # Translate to Hindi
+        # Translate to Hindi using deep-translator
         st.subheader("🌍 Translating to Hindi...")
-        translator = Translator()
-        translated_text = translator.translate(text, src="en", dest="hi").text
+        translator = GoogleTranslator(source="auto", target="hi")
+        translated_text = translator.translate(text)
         st.text_area("Translated Text (Hindi):", translated_text, height=200)
 
         # Convert to Speech
