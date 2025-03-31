@@ -1,0 +1,7 @@
+dependencies:
+  flutter:
+    sdk: flutter
+  file_picker: ^6.1.1
+  flutter_tts: ^3.8.5
+  pdfx: ^2.6.0
+  pdf_text: ^0.4.0
