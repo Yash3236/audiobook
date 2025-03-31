@@ -1,4 +1,5 @@
-streamlit==1.30.0        # For UI
+streamlit==1.30.0        # UI Framework
 pdfplumber==0.10.2       # Extract text from PDFs
-gTTS==2.3.2              # Google Text-to-Speech
-pydub==0.25.1            # Convert and save audio
+gTTS==2.3.2              # Convert text to speech
+pydub==0.25.1            # Save and process audio files
+googletrans==4.0.0-rc1   # Translate text into Hindi
