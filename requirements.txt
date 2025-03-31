@@ -1,4 +1,4 @@
-Flask==3.0.0          # Lightweight web framework
-pdfplumber==0.10.2    # Extract text from PDFs
-gTTS==2.3.2           # Google Text-to-Speech for audio generation
-pydub==0.25.1         # Convert and save audio
+streamlit==1.30.0        # For UI
+pdfplumber==0.10.2       # Extract text from PDFs
+gTTS==2.3.2              # Google Text-to-Speech
+pydub==0.25.1            # Convert and save audio
