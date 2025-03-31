@@ -2,32 +2,40 @@ import streamlit as st
 import pdfplumber
 from gtts import gTTS
 import os
+from googletrans import Translator
 
-# Set up the app
-st.set_page_config(page_title="PDF to Audiobook", layout="centered")
-st.title("📖 PDF to Audiobook Converter")
+# Set up Streamlit App
+st.set_page_config(page_title="PDF to Hindi Audiobook", layout="centered")
+st.title("📖 PDF to Hindi Audiobook Converter 🇮🇳")
 
-# Upload PDF
+# Upload PDF File
 uploaded_file = st.file_uploader("Upload a PDF file", type=["pdf"])
 
 if uploaded_file is not None:
     with pdfplumber.open(uploaded_file) as pdf:
         text = ""
         for page in pdf.pages:
-            text += page.extract_text() + "\n"
+            extracted_text = page.extract_text()
+            if extracted_text:
+                text += extracted_text + "\n"
 
     if text.strip():
         st.success("✅ Text extracted successfully!")
 
-        # Convert text to speech
-        if st.button("🎧 Convert to Audiobook"):
-            audio_file = "audiobook.mp3"
-            tts = gTTS(text, lang="en")
+        # Translate to Hindi
+        st.subheader("🌍 Translating to Hindi...")
+        translator = Translator()
+        translated_text = translator.translate(text, src="en", dest="hi").text
+        st.text_area("Translated Text (Hindi):", translated_text, height=200)
+
+        # Convert to Speech
+        if st.button("🎧 Convert to Hindi Audiobook"):
+            audio_file = "hindi_audiobook.mp3"
+            tts = gTTS(translated_text, lang="hi")
             tts.save(audio_file)
 
             st.audio(audio_file, format="audio/mp3")
             with open(audio_file, "rb") as f:
-                st.download_button("⬇ Download MP3", f, file_name="audiobook.mp3")
+                st.download_button("⬇ Download Hindi Audiobook", f, file_name="hindi_audiobook.mp3")
     else:
         st.error("❌ No readable text found in the PDF.")
-
